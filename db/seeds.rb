@@ -25,3 +25,7 @@ end
     student_id: Faker::Number.between(from: 1, to: 50)
   })
 end
+
+Enrollment.all.each do |enrollment|
+  Bill.create_bills(enrollment)
+end

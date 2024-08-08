@@ -10,16 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_07_211511) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_08_192141) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "bills", force: :cascade do |t|
     t.integer "amount"
     t.date "due_date"
-    t.string "status"
+    t.string "status", default: "open"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "enrollment_id", null: false
+    t.index ["enrollment_id"], name: "index_bills_on_enrollment_id"
   end
 
   create_table "enrollments", force: :cascade do |t|
@@ -41,5 +43,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_07_211511) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "bills", "enrollments"
   add_foreign_key "enrollments", "students"
 end
