@@ -45,3 +45,9 @@ group :development do
   # gem "spring"
 end
 
+# Use kaminari for pagination
+gem "kaminari", "~> 1.2.2"
+
+# Use faker for generating fake data
+gem "faker", "~> 3.4.2"
+
