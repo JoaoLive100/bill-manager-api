@@ -1,4 +1,5 @@
 class EnrollmentsController < ApplicationController
+  http_basic_authenticate_with name: "admin", password: "admin", only: :create
 
   # GET /enrollments/ (all enrollments)
   def index
@@ -36,6 +37,9 @@ class EnrollmentsController < ApplicationController
     @enrollment = Enrollment.new(enrollment_params)
 
     if @enrollment.save
+
+      Bill.create_bills(@enrollment)
+
       render json: {
         id: @enrollment.id,
         student_id: @enrollment.student_id,
