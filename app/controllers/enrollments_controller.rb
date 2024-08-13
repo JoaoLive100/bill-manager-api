@@ -1,4 +1,6 @@
 class EnrollmentsController < ApplicationController
+  # Base64 'Basic YWRtaW46YWRtaW4=\n' Authorization Header
+  http_basic_authenticate_with name: ENV['BASIC_AUTH_USERNAME'], password: ENV['BASIC_AUTH_PASSWORD'], only: [:create]
 
   # GET /enrollments/ (all enrollments)
   def index
@@ -36,6 +38,9 @@ class EnrollmentsController < ApplicationController
     @enrollment = Enrollment.new(enrollment_params)
 
     if @enrollment.save
+
+      Bill.create_bills(@enrollment)
+
       render json: {
         id: @enrollment.id,
         student_id: @enrollment.student_id,

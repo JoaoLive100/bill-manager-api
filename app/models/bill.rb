@@ -13,7 +13,7 @@ class Bill < ApplicationRecord
 		count = enrollment.installments
 		amount = enrollment.amount / count
 		due_day = enrollment.due_day.to_i
-		due_month = enrollment.due_day.to_i <= Date.today.day ? 1 : 0
+		due_month = enrollment.due_day.to_i < Date.today.day ? 1 : 0
 
 		count.times do |i|
 			Bill.create(
