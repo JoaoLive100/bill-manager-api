@@ -1,5 +1,6 @@
 class EnrollmentsController < ApplicationController
-  http_basic_authenticate_with name: "admin", password: "admin", only: :create
+  # Base64 'Basic YWRtaW46YWRtaW4=\n' Authorization Header
+  http_basic_authenticate_with name: ENV['BASIC_AUTH_USERNAME'], password: ENV['BASIC_AUTH_PASSWORD'], only: [:create]
 
   # GET /enrollments/ (all enrollments)
   def index

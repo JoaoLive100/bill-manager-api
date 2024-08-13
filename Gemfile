@@ -51,3 +51,5 @@ gem "kaminari", "~> 1.2.2"
 # Use faker for generating fake data
 gem "faker", "~> 3.4.2"
 
+# Dotenv
+gem "dotenv-rails", groups: %i[development test]
