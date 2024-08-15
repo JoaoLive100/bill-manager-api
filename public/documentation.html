@@ -1,0 +1,818 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Gerenciador de Mensalidades</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-default_background {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 237, 214, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 237, 214, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(249, 228, 188, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="025ff8d9-129d-407f-9832-4d120b122f35" class="page sans"><header><h1 class="page-title">Gerenciador de Mensalidades</h1><p class="page-description"></p></header><div class="page-body"><ul id="46fd324c-712b-44f6-93a0-23e91a6ec9ed" class="bulleted-list"><li style="list-style-type:disc">Data de inicio: 14/06/2024</li></ul><ul id="ea591ab6-4b01-4536-9d6a-2ae3be3059ec" class="bulleted-list"><li style="list-style-type:disc">Responsáveis pelo projeto: <code>@rafaela.amary</code> e <code>@gabriel.marqueti</code></li></ul><h2 id="9d4eacbc-82a3-4f16-8c6d-1846168851be" class="">Requisitos da API</h2><ul id="84e47244-a102-497d-93c2-fc46289dbd1f" class="bulleted-list"><li style="list-style-type:disc">O projeto deve ser feito com a linguagem <code>Ruby</code> , usando o framework Ruby on Rails.</li></ul><ul id="2de8377d-c04a-420a-ac94-842a3622f01f" class="bulleted-list"><li style="list-style-type:disc">Os campos devem ser respeitados. Todos os campos, validações e restrições devem existir. Fique a vontade para usar sua criatividade adicionando novos campos ou validações se necessário.</li></ul><ul id="d003f835-636b-4673-bc26-91998856dfb8" class="bulleted-list"><li style="list-style-type:disc">Os dados da API devem ser salvos em um banco de dados <code>PostgreSQL</code> .</li></ul><ul id="72f63dff-3551-49d4-a269-192d3ddd02a9" class="bulleted-list"><li style="list-style-type:disc">As rotas da API devem receber e responder no formato JSON.</li></ul><ul id="cc342d68-4acc-45ec-8ee3-7d6cf4d2a81a" class="bulleted-list"><li style="list-style-type:disc">Sua API deve ter pelo menos as rotas descritas nesse documento. Fique a vontade para adicionar novas rotas e funcionalidades, mantendo sempre a consistência dos dados no banco.</li></ul><h2 id="a228c189-de1e-4333-986d-aa5b63949f2b" class="">Modelos</h2><p id="8bc3169c-8a84-4ea0-b5a3-215e2c26c3d8" class="">Os modelos obrigatórios nessa API são:</p><ul id="14bea80a-d9b8-429a-b90f-56c1d5136329" class="bulleted-list"><li style="list-style-type:disc"><strong><span style="border-bottom:0.05em solid">Student (Aluno)</span></strong><ul id="cda3ddfe-c6aa-45b4-852e-cfd68b79b059" class="bulleted-list"><li style="list-style-type:circle">name: Nome do Aluno</li></ul><ul id="be1220e3-7365-4cd2-a896-391cab7c825c" class="bulleted-list"><li style="list-style-type:circle">cpf: CPF do Aluno</li></ul><ul id="97297081-ac87-4067-99a6-2d5b80d9c031" class="bulleted-list"><li style="list-style-type:circle">birthdate: Data de nascimento do Aluno</li></ul><ul id="f83477f1-2db2-4a8e-abd1-923a8ea610c3" class="bulleted-list"><li style="list-style-type:circle">payment_method: Meio de pagamento do aluno (cartão de crédito ou boleto)</li></ul></li></ul><ul id="897b1002-157f-4467-b625-d356a5f405bf" class="bulleted-list"><li style="list-style-type:disc"><strong><span style="border-bottom:0.05em solid">Enrollment (Matrícula)</span></strong><ul id="53cae573-2097-483d-a897-47846d00e94c" class="bulleted-list"><li style="list-style-type:circle">amount: Valor total em centavos da matrícula</li></ul><ul id="efb04e3a-d900-4345-ab52-17021fca6910" class="bulleted-list"><li style="list-style-type:circle">installments: Quantidade de mensalidades da matrícula</li></ul><ul id="02951a4e-0610-4198-930a-7c9c0d1491d3" class="bulleted-list"><li style="list-style-type:circle">due_day: Dia de vencimento da matrícula</li></ul></li></ul><ul id="75b36bc4-32ed-40d9-a465-e0dbb50ca27b" class="bulleted-list"><li style="list-style-type:disc"><strong><span style="border-bottom:0.05em solid">Bill (Mensalidade)</span></strong><ul id="30cfc2fe-518f-46f7-b7dc-bf696757f63b" class="bulleted-list"><li style="list-style-type:circle">amount: Valor da mensalidade em centavos</li></ul><ul id="8371b30e-5369-453b-b91f-58959ab5b4e6" class="bulleted-list"><li style="list-style-type:circle">due_date: Data de vencimento da mensalidade</li></ul><ul id="0bbdd19e-d82f-4ac4-ad9a-3d932b3cd43a" class="bulleted-list"><li style="list-style-type:circle">status: Status da mensalidade (Aberta, atrasada ou paga)</li></ul></li></ul><p id="915f9cf7-963d-42c8-8a71-6de4f90839ed" class="">
+</p><blockquote id="1b9a23e0-a8a0-4995-9088-bdfd48f3b5e5" class="">Um aluno pode ter várias matrículas e uma matrícula tem várias mensalidades.</blockquote><h2 id="0e0e91b8-9869-40dc-a302-423995f489a6" class="">Validação dos modelos</h2><h3 id="0e9cb0c5-d239-45c7-af80-30d9d0ad07bc" class="">Student</h3><table id="7bf758e4-08e2-472f-a7da-c8fded55db3c" class="simple-table"><thead class="simple-table-header"><tr id="8a16ad6a-b52c-4dff-89cf-c1cbf42200f2"><th id="[wgL" class="block-color-blue_background simple-table-header" style="width:169px"><strong>Campo </strong></th><th id="{ilD" class="block-color-blue_background simple-table-header" style="width:169px"><strong>Tipo</strong></th><th id="Dew&lt;" class="block-color-blue_background simple-table-header" style="width:474px"><strong>Validações</strong></th></tr></thead><tbody><tr id="5fed3a3c-1193-4777-aa35-cd3fcb226963"><td id="[wgL" class="" style="width:169px">name</td><td id="{ilD" class="" style="width:169px">string</td><td id="Dew&lt;" class="" style="width:474px">→ Não pode estar vazio</td></tr><tr id="810f4dc8-8006-4fb6-bd09-41ca49b32ff1"><td id="[wgL" class="" style="width:169px">cpf</td><td id="{ilD" class="" style="width:169px">string</td><td id="Dew&lt;" class="" style="width:474px">→ Tem que ser um CPF válido<br/>→ Deve ser único<br/></td></tr><tr id="deee4ade-86d0-4e98-869f-4a17bcd5d1f6"><td id="[wgL" class="" style="width:169px">birthdate</td><td id="{ilD" class="" style="width:169px">date</td><td id="Dew&lt;" class="" style="width:474px">→ Tem que ser uma data válida se presente<br/>→ Deve aceitar ser vazio<br/></td></tr><tr id="97742a72-8aba-42f2-a083-f0134e7eff43"><td id="[wgL" class="" style="width:169px">payment_method</td><td id="{ilD" class="" style="width:169px">string</td><td id="Dew&lt;" class="" style="width:474px">→ Tem que ser um dos seguinte: <code>credit_card</code> ou <code>boleto</code> <br/>→ Não pode ser vaizo<br/></td></tr></tbody></table><h3 id="60cf397d-5735-426b-9a66-d494007c819e" class="">Enrollment</h3><table id="42796d2b-32c4-4ad0-b610-e5c840d35632" class="simple-table"><thead class="simple-table-header"><tr id="dd2497fe-de8e-4421-aa74-66e3574934f2"><th id="[wgL" class="block-color-blue_background simple-table-header" style="width:169px"><strong>Campo </strong></th><th id="{ilD" class="block-color-blue_background simple-table-header" style="width:169px"><strong>Tipo</strong></th><th id="Dew&lt;" class="block-color-blue_background simple-table-header" style="width:474px"><strong>Validações</strong></th></tr></thead><tbody><tr id="16c99bd1-89b6-4a38-90b0-524e80a9804e"><td id="[wgL" class="" style="width:169px">amount</td><td id="{ilD" class="" style="width:169px">integer</td><td id="Dew&lt;" class="" style="width:474px">→ Não pode estar vazio<br/>→ Tem que ser maior que 0<br/></td></tr><tr id="dd7f6f99-4044-489a-a661-ec3edecdc243"><td id="[wgL" class="" style="width:169px">installments</td><td id="{ilD" class="" style="width:169px">integer</td><td id="Dew&lt;" class="" style="width:474px">→ Não pode estar vazio<br/>→ Tem que ser maior que 1<br/></td></tr><tr id="ed25dba8-3f65-4a74-8e41-5d146060e2fc"><td id="[wgL" class="" style="width:169px">due_day</td><td id="{ilD" class="" style="width:169px">integer</td><td id="Dew&lt;" class="" style="width:474px">→ Não pode estar vazio<br/>→ Tem que ser um dia válido (de 1 a 31)<br/></td></tr></tbody></table><h3 id="5cc8b5df-8051-4945-b243-1dec8f388eb7" class="">Bill</h3><table id="4609da32-dbff-4c7c-ae2b-526f600f3fcf" class="simple-table"><thead class="simple-table-header"><tr id="9703aee4-35ca-42bc-b758-2323c9968214"><th id="[wgL" class="block-color-blue_background simple-table-header" style="width:169px"><strong>Campo </strong></th><th id="{ilD" class="block-color-blue_background simple-table-header" style="width:169px"><strong>Tipo</strong></th><th id="Dew&lt;" class="block-color-blue_background simple-table-header" style="width:474px"><strong>Validações</strong></th></tr></thead><tbody><tr id="750388b2-a0f3-4675-aa4b-d317bf9e0f36"><td id="[wgL" class="" style="width:169px">amount</td><td id="{ilD" class="" style="width:169px">integer</td><td id="Dew&lt;" class="" style="width:474px">→ Não pode estar vazio<br/>→ Tem que ser maior que 0<br/></td></tr><tr id="fe8a9ea8-d4b7-4e4e-a676-90b756f6c8f7"><td id="[wgL" class="" style="width:169px">due_date</td><td id="{ilD" class="" style="width:169px">date</td><td id="Dew&lt;" class="" style="width:474px">→ Não pode estar vazio<br/>→ Tem que ser uma data válida<br/></td></tr><tr id="50c65c5d-1bc4-4366-b197-1efccdfd5edd"><td id="[wgL" class="" style="width:169px">status</td><td id="{ilD" class="" style="width:169px">string</td><td id="Dew&lt;" class="" style="width:474px">→ Tem que ser um dos seguintes: <code>open</code>, <code>pending</code> ou <code>paid</code><br/>→ Sendo o valor default: <br/><code>open</code><br/>→ Não pode estar vazio<br/></td></tr></tbody></table><h2 id="fcc507ee-1ed4-4e6c-8f04-e6cae145013e" class="">Restrições</h2><ul id="657b0042-8974-4d02-a863-f6315648e393" class="bulleted-list"><li style="list-style-type:disc">A soma de todas as <code>bills</code> devem ser <span style="border-bottom:0.05em solid">iguais</span> ao valor da <code>enrollment</code></li></ul><ul id="f907b67e-38bd-454c-817a-ffdb80d6a5a8" class="bulleted-list"><li style="list-style-type:disc">A soma da quantidade de <code>bills</code> deve ser <span style="border-bottom:0.05em solid">igual</span> ao valor do campo <code>installments</code> da <code>enrollment</code></li></ul><h2 id="a3a5a738-2ad0-4d48-b565-069e5415f699" class="">Rotas</h2><h3 id="d4f9f2dc-d0ba-464f-93de-7acdafaf810a" class="">Listagem de Alunos</h3><p id="97c86d96-89d6-4e10-aadd-12b48cf5e8ef" class="">Essa rota deve retornar uma lista aginada de alunos com os dados formatados e recebendo como parâmtro o número da página e o total de itens por página:</p><ul id="5c083dc3-93f2-490a-a0ad-a2773038279c" class="bulleted-list"><li style="list-style-type:disc"><strong><span style="border-bottom:0.05em solid">Request</span></strong><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a439173c-a924-4634-b0cd-c5aa8c98af16" class="code"><code class="language-JSON">GET /students
+
+{
+	&quot;page&quot;: 1,
+	&quot;count&quot;: 3
+}</code></pre></li></ul><ul id="8c263797-365b-49c7-a22b-de4b3f8bd9ce" class="bulleted-list"><li style="list-style-type:disc"><strong><span style="border-bottom:0.05em solid">Response</span></strong><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="0bb145bb-0ee7-47ea-848b-a3b917e5a29e" class="code"><code class="language-JSON">{
+  &quot;page&quot;: 1,
+  &quot;items&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;name&quot;: &quot;Aluno teste&quot;,
+      &quot;cpf&quot;: &quot;502.757.480-06&quot;,
+      &quot;birthdate&quot;: &quot;23/10/2000&quot;,
+      &quot;payment_method&quot;: &quot;Cartão de crédito&quot;
+    },
+    {...},
+    {...}
+  ]
+}</code></pre></li></ul><h3 id="dc5976f4-f611-4dfe-8dd0-6143b41a43ee" class="">Criação de Alunos</h3><p id="bd283af2-798e-447d-afa9-916ec26eb872" class="">Essa rota deve retornar o id do aluno criado:</p><ul id="6de8ff4b-dd68-40ab-bac7-5faba3ddb826" class="bulleted-list"><li style="list-style-type:disc"><strong><span style="border-bottom:0.05em solid">Request</span></strong><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="fc67b8b8-fa6d-4220-8e2b-0efb75412d92" class="code"><code class="language-JSON">POST /students
+
+{
+	&quot;name&quot;: &quot;Student Name&quot;,
+	&quot;cpf&quot;: &quot;038.347.910-08&quot;,
+	&quot;birthdate&quot;: &quot;23/10/1996&quot;,
+	&quot;payment_method&quot;: &quot;boleto&quot;
+}</code></pre></li></ul><ul id="d16b9295-b00f-4f96-934c-2b76089eebdd" class="bulleted-list"><li style="list-style-type:disc"><strong><span style="border-bottom:0.05em solid">Response</span></strong><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c4a899d0-16ef-4ff6-b7fc-05efbde4bacc" class="code"><code class="language-JSON">{
+	&quot;id&quot;: 2
+}</code></pre></li></ul><h3 id="b7014c1d-e750-43bc-9482-49feb74d14fd" class="">Listagem de Matrículas</h3><p id="96bbbc82-f67a-46f8-8f74-59513391043a" class="">Essa rota deve retornar uma lista paginada de matrículas e todas as mensaliddes de cada matrícula, recebendo como parâmetro o número da página e o total de itens por página:</p><ul id="8f273eaf-3e07-4053-8433-95b783b72d94" class="bulleted-list"><li style="list-style-type:disc"><strong><span style="border-bottom:0.05em solid">Resquest</span></strong><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="9b0b0e11-6cba-4235-9d6c-9189587ea620" class="code"><code class="language-JSON">GET /enrollments
+
+{
+	&quot;page&quot;: 1,
+	&quot;count&quot;: 3
+}</code></pre></li></ul><ul id="e6302e81-dfe3-432b-972c-023637717d6c" class="bulleted-list"><li style="list-style-type:disc"><strong><span style="border-bottom:0.05em solid">Response</span></strong><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="301fbffb-a2f0-465a-88ac-397eaeca5e9d" class="code"><code class="language-JSON">{
+  &quot;page&quot;: 1,
+  &quot;items&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;student_id&quot;: 1,
+      &quot;amount&quot;: 1200000,
+      &quot;installments&quot;: 3,
+      &quot;due_day&quot;: 5,
+      &quot;bills&quot;: [
+        {
+          &quot;id&quot;: 1,
+          &quot;due_date&quot;: &quot;05/03/2021&quot;,
+          &quot;status&quot;: &quot;open&quot;,
+          &quot;amount&quot;: 400000
+        }
+        {
+          &quot;id&quot;: 2,
+          &quot;due_date&quot;: &quot;05/04/2021&quot;,
+          &quot;status&quot;: &quot;open&quot;,
+          &quot;amount&quot;: 400000
+        },
+        {
+          &quot;id&quot;: 3,
+          &quot;due_date&quot;: &quot;05/05/2021&quot;,
+          &quot;status&quot;: &quot;open&quot;,
+          &quot;amount&quot;: 400000
+        }
+      ]
+    },
+    {...},
+    {...}
+  ]
+}</code></pre></li></ul><h3 id="8abf8674-466a-4203-8411-3615f2f94232" class="">Criação de Matrículas</h3><p id="c861362c-ad6e-4b76-beef-35c4b2956968" class="">Ao criar a matrícula, suas mensalidades devem ser geradas automaticamente, seguindo as seguintes regras:</p><ul id="2238addf-be89-4f59-918a-2c417f84f5a6" class="bulleted-list"><li style="list-style-type:disc">A quantidade de mensalidades devem ser iguais ao campo <code>installments</code> da matrícula</li></ul><ul id="11e36f2f-a187-4f7f-a1e3-48cc9d2a9610" class="bulleted-list"><li style="list-style-type:disc">O valor de cada mensalidade (<code>amount</code>) deve ser calculado a partir do valor da matrícula (<code>amount</code>) dividido pela quantidade de <code>installments</code> da matrícula</li></ul><ul id="79511199-4c30-42ed-a2be-3ee29859829e" class="bulleted-list"><li style="list-style-type:disc">A data de vencimento das mensalidades devem ser subsequentes a data atual, sempre havendo uma e apenas uma mensalidade para cada mês<ul id="c92a30b1-8c75-4576-abc4-09ab6f092c3b" class="bulleted-list"><li style="list-style-type:circle">Caso o dia de vencimento da matrícula seja um dia menos que o dia atual, a primeira mensalidade deve começar no mês seguinte, caso seja maior ou igual deve começar no mês atual</li></ul></li></ul><ul id="fb0ff320-9491-4352-9cfb-71d724ef4153" class="bulleted-list"><li style="list-style-type:disc">Por essa rota ser um rota crítica para a API, precisamos que tenha uma autenticação basic nela, com o usuário: <code>admin_ops</code> e a senha <code>billing</code></li></ul><p id="aadcfe8f-6d6b-4d4d-8ab0-df71c0611731" class="">A rota deve retornar a matrícula e suas mensalidades. Aqui vamos deixar dois exemplos, o primeiro com a data atual sendo <code>01/03/2021</code> e o segundo <code>10/03/2021</code> .</p><ul id="b3eb0b94-11bd-415b-94dc-bb824080dc9d" class="bulleted-list"><li style="list-style-type:disc"><strong><span style="border-bottom:0.05em solid">Request (dia atual </span></strong><code><strong><span style="border-bottom:0.05em solid">01/03/2021</span></strong></code><strong><span style="border-bottom:0.05em solid">)</span></strong><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="7f5dfdc5-a3ee-4f05-805e-1c1428ea97e2" class="code"><code class="language-JSON">POST /enrollments
+
+{
+	&quot;amount&quot;: 1200000,
+	&quot;installments&quot;: 3,
+  &quot;due_day&quot;: 5,
+  &quot;student_id&quot;: 1
+}</code></pre></li></ul><ul id="2a586f5d-9180-42fb-b51a-b53c9879f28d" class="bulleted-list"><li style="list-style-type:disc"><strong><span style="border-bottom:0.05em solid">Response (dia atual </span></strong><code><strong><span style="border-bottom:0.05em solid">01/03/2021</span></strong></code><strong><span style="border-bottom:0.05em solid">)</span></strong><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="3ac65280-5d69-4a51-995e-a8fbe2ed7175" class="code"><code class="language-JSON">{
+  &quot;id&quot;: 1,
+  &quot;student_id&quot;: 1,
+  &quot;amount&quot;: 1200000,
+  &quot;installments&quot;: 3,
+  &quot;due_day&quot;: 5,
+  &quot;bills&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;due_date&quot;: &quot;05/03/2021&quot;,
+      &quot;status&quot;: &quot;open&quot;,
+      &quot;amount&quot;: 400000
+    }
+    {
+      &quot;id&quot;: 2,
+      &quot;due_date&quot;: &quot;05/04/2021&quot;,
+      &quot;status&quot;: &quot;open&quot;,
+      &quot;amount&quot;: 400000
+    },
+    {
+      &quot;id&quot;: 3,
+      &quot;due_date&quot;: &quot;05/05/2021&quot;,
+      &quot;status&quot;: &quot;open&quot;,
+      &quot;amount&quot;: 400000
+    }
+  ]
+}</code></pre></li></ul><ul id="14bb4321-dd13-4e1d-b1ef-2982f0a1e56e" class="bulleted-list"><li style="list-style-type:disc"><strong><span style="border-bottom:0.05em solid">Request (dia atual </span></strong><code><strong><span style="border-bottom:0.05em solid">10/03/2021</span></strong></code><strong><span style="border-bottom:0.05em solid">)</span></strong><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="24f54602-9a2e-48a8-8f09-86909325313d" class="code"><code class="language-JSON">POST /enrollments
+
+{
+  &quot;amount&quot;: 1200000,
+  &quot;installments&quot;: 3,
+  &quot;due_day&quot;: 5,
+  &quot;student_id&quot;: 1
+}</code></pre></li></ul><ul id="fb93f764-fc08-4ab5-8cd7-3ea384897a3d" class="bulleted-list"><li style="list-style-type:disc"><strong><span style="border-bottom:0.05em solid">Response (dia atual </span></strong><code><strong><span style="border-bottom:0.05em solid">10/03/2021</span></strong></code><strong><span style="border-bottom:0.05em solid">)</span></strong><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d13fd754-c40d-4c36-917a-50042279ae39" class="code"><code class="language-JSON">{
+  &quot;id&quot;: 1,
+  &quot;student_id&quot;: 1,
+  &quot;amount&quot;: 1200000,
+  &quot;installments&quot;: 3,
+  &quot;due_day&quot;: 5,
+  &quot;bills&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;due_date&quot;: &quot;05/04/2021&quot;,
+      &quot;status&quot;: &quot;open&quot;,
+      &quot;amount&quot;: 400000
+    }
+    {
+      &quot;id&quot;: 2,
+      &quot;due_date&quot;: &quot;05/05/2021&quot;,
+      &quot;status&quot;: &quot;open&quot;,
+      &quot;amount&quot;: 400000
+    },
+    {
+      &quot;id&quot;: 3,
+      &quot;due_date&quot;: &quot;05/06/2021&quot;,
+      &quot;status&quot;: &quot;open&quot;,
+      &quot;amount&quot;: 400000
+    }
+  ]
+}</code></pre></li></ul><h2 id="a63a6318-ced8-4192-9c97-d53db1f300c5" class="">Considerações Finais</h2><ul id="7fc8cf09-679a-458c-9bfa-2aa9194fa320" class="bulleted-list"><li style="list-style-type:disc">Este é um projeto back-end! Não deve ser feito telas</li></ul><ul id="06289733-d037-413e-bfa4-eba04afc07f1" class="bulleted-list"><li style="list-style-type:disc">Desenvolva seu projeto utilizando um repositório do GitHub e nos envie o link do repositório ao finalizar o desafio</li></ul><ul id="6d17b62e-f3d8-4a74-951a-656eca6be4a3" class="bulleted-list"><li style="list-style-type:disc">Faça do seu jeito, lembre-se que é um desafio para vocês se desenvolverem e é necessário bater a cabeça e fazer do seu jeitinho. Qualquer dúvida que tenha nos chame!!! </li></ul><p id="dbe9adb3-56ef-4039-8b25-2ddb8e151d77" class="">
+</p><p id="807ca552-cc09-4f50-bd07-ec9633284769" class="">
+</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
